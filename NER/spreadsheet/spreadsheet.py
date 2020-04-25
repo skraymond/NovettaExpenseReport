@@ -75,8 +75,11 @@ class Spreadsheet(metaclass=ABCMeta):
 
                 prev_value = cell.value
                 if prev_value is None:
-                    prev_value = 0
-                cell.value = prev_value + charge.charge_amount
+                    cell.value = charge.charge_amount
+                elif str(prev_value).startswith("="):
+                    cell.value = "%s + %.2f" % (prev_value, charge.charge_amount)
+                else:
+                    cell.value = "=%s + %.2f" % (prev_value, charge.charge_amount)
 
         self._workbook.save(self._output_filename)
 

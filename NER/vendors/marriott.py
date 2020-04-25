@@ -142,4 +142,4 @@ class MarriottFairfax(Marriott):
                     self._charges.append(Charge(park, ChargeType.PARKING, self._arrival_date + timedelta(days=i)))
 
 
-        self.logger.debug("Charges found: %s", "; \n".join([str(x) for x in self._charges]))
+        self.logger.debug("Charges found: %s", "; ".join([str(x) for x in self._charges]))

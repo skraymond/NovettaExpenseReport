@@ -3,6 +3,7 @@ import NER.vendors
 import NER.util.ner_configs
 from NER.vendors.southwest import Southwest
 from NER.vendors.enterprise import Enterprise
+from NER.vendors.marriott import MarriottFairfax
 from NER.vendors.uber import Uber
 from NER.spreadsheet.spreadsheet import SanAntonio2020SpreadSheet
 import logging
@@ -20,6 +21,7 @@ class NERProcessor(object):
         self.vendors = []
         self.vendors.append(Southwest)
         self.vendors.append(Enterprise)
+        self.vendors.append(MarriottFairfax)
         self.vendors.append(Uber)
         self.processed_vendors = []
 
