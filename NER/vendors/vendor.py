@@ -29,6 +29,20 @@ class ChargeType(Enum):
                 ChargeType.LAUNDRY.value: "LAUNDRY"}[self.value]
 
 
+class Charge(object):
+    """
+    Class to represent a chargee on the expense report
+
+    @:param charge a float representing the amount of money for the charge
+    @:param charge_type a ChargeType representing the type of charge
+    @:param charge_date a datetime of the date of the charge
+    """
+    def __init__(self, charge_amount, charge_type, charge_date):
+        self.charge_amount = charge_amount
+        self.charge_type = charge_type
+        self.charge_date = charge_date
+
+
 class Vendor(metaclass=ABCMeta):
 
     @staticmethod
@@ -50,12 +64,12 @@ class Vendor(metaclass=ABCMeta):
         raise NotImplementedError
 
     @abstractmethod
-    def get_expense_charge(self):
-        """@return float of the amount this vendor charged"""
+    def get_expense_charges(self):
+        """@return array of Charge that this vendor has charged"""
         raise NotImplementedError
 
     @abstractmethod
-    def get_expense_date(self):
+    def get_expense_dates(self):
         """@:return datetime of the date of this vendor's expense"""
         raise NotImplementedError
 
@@ -65,8 +79,10 @@ class Vendor(metaclass=ABCMeta):
         return False
 
     def __str__(self):
+        total_cost = sum([x.charge_amount for x in self.get_expense_charges()])
+        all_charge_types = ", ".join(str(x.charge_type) for x in self.get_expense_charges())
+        all_dates_types = ", ".join(str(x) for x in self.get_expense_dates())
         return "Vendor named %s of type %s cost %.2f on date %s" % (self.get_vendor_name(),
-                                                                    str(self.charge_type()),
-                                                                    self.get_expense_charge(),
-                                                                    str(self.get_expense_date()))
-
+                                                                    all_charge_types,
+                                                                    total_cost,
+                                                                    all_dates_types)

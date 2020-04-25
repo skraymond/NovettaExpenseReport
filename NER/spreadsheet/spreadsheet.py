@@ -69,12 +69,13 @@ class Spreadsheet(metaclass=ABCMeta):
 
     def process_vendors(self):
         for vendor in self._vendors:
-            cell = self.get_cell_for_date_and_charge(vendor.get_expense_date(), vendor.charge_type())
+            for charge in vendor.get_expense_charges():
+                cell = self.get_cell_for_date_and_charge(charge.charge_date, charge.charge_type)
 
-            prev_value = cell.value
-            if prev_value is None:
-                prev_value = 0
-            cell.value = prev_value + vendor.get_expense_charge()
+                prev_value = cell.value
+                if prev_value is None:
+                    prev_value = 0
+                cell.value = prev_value + charge.charge_amount
 
         self._workbook.save(self._output_filename)
 
@@ -160,16 +161,23 @@ class Spreadsheet(metaclass=ABCMeta):
     def _to_date_cell(self):
         raise NotImplementedError
 
+    def __get_all_dates(self):
+        all_dates = []
+        for a_list_of_list in [v.get_expense_dates() for v in self._vendors]:
+            for i in range(len(a_list_of_list)):
+                all_dates.append(a_list_of_list[i])
+        return all_dates
+
     @property
     def _from_date(self):
         if self.__from_date is None:
-            self.__from_date = min([v.get_expense_date() for v in self._vendors])
+            self.__from_date = min(self.__get_all_dates())
         return self.__from_date
 
     @property
     def _to_date(self):
         if self.__to_date is None:
-            self.__to_date = max([v.get_expense_date() for v in self._vendors])
+            self.__to_date = self.__to_date = max(self.__get_all_dates())
         return self.__to_date
 
     @property

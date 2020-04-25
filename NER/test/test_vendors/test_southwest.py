@@ -14,6 +14,15 @@ class MyTestCase(unittest.TestCase):
                    "708PTS\n\nhttps://www.southwest.com/myaccount/trips/past/details " \
                    "?confirmationNumber=NKQ6UG "
 
+    def helper_function(self, ocr_text, correct_cost, correct_date):
+        sw = Southwest(ocr_text)
+        self.assertTrue(Southwest.matches_vendor(ocr_text))
+        self.assertEqual(ChargeType.AIRPLANE, sw.get_expense_charges()[0].charge_type)
+        self.assertEqual(1, len(sw.get_expense_charges()))
+        self.assertEqual(correct_cost, sw.get_expense_charges()[0].charge_amount)
+        self.assertEqual(correct_date, sw.get_expense_charges()[0].charge_date)
+        self.assertEqual(correct_date, sw.get_expense_dates()[0])
+
     def test_southwest_match_vendor(self):
         self.assertTrue(Southwest.matches_vendor(self.good_sw_text))
         self.assertFalse(Southwest.matches_vendor(self.test_string))
@@ -22,10 +31,7 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(Southwest.charge_type(), ChargeType.AIRPLANE)
 
     def test_southwest_price(self):
-        self.assertEqual(176.00, Southwest(self.good_sw_text).get_expense_charge())
-
-    def test_southwest_date(self):
-        self.assertEqual(date.fromisoformat("2019-08-26"), Southwest(self.good_sw_text).get_expense_date())
+        self.helper_function(self.good_sw_text, 176.00, date.fromisoformat("2019-08-26"))
 
     def test_southwest_str(self):
         self.assertEqual("Vendor named Southwest of type AIRPLANE cost 176.00 on date 2019-08-26",
@@ -38,9 +44,7 @@ class MyTestCase(unittest.TestCase):
                       "FARE\n\nDCA to SAT 2/11/2019 Business Select $524.35\n\nGov't taxes and fees $62.33\n\nTotal " \
                       "°586.68\n\nTotal points earned + 12, " \
                       "584PTS\n\nhttps://www.southwest.com/myaccount/trips/past/details ?confirmationNumber=JY C6HX "
-        sw = Southwest(parsed_text)
-        self.assertEqual(586.68, sw.get_expense_charge())
-        self.assertEqual(date.fromisoformat("2019-02-11"), sw.get_expense_date())
+        self.helper_function(parsed_text, 586.68, date.fromisoformat("2019-02-11"))
 
     def test_southwest_parse_error_02(self):
         parsed_text = "1/22/2019 Southwest Airlines | My Account, Trips, Past, Details\nPast Flight\n\nSan Antonio, " \
@@ -49,9 +53,7 @@ class MyTestCase(unittest.TestCase):
                       "FARE\n\nSAT toDCA 12/06/2018 Wanna Get Away $264.19\n\nGov't taxes and fees 546.71\n\nTotal " \
                       "°310.90\n\nTotal points earned + 3," \
                       "170PTS\n\nhttps://www.southwest.com/myaccount/trips/past/details ?confirmationNumber=JWZM4P "
-        sw = Southwest(parsed_text)
-        self.assertEqual(310.90, sw.get_expense_charge())
-        self.assertEqual(date.fromisoformat("2018-12-06"), sw.get_expense_date())
+        self.helper_function(parsed_text, 310.90, date.fromisoformat("2018-12-06"))
 
     def test_southwest_parse_error_03(self):
         parsed_text = "4/16/2019 Southwest Airlines | My Account, Trips, Past, Details\n\nPast Flight\n\nApr 7\n\nLos " \
@@ -61,9 +63,7 @@ class MyTestCase(unittest.TestCase):
                       "?confirmationNumber=QHCO8O\n\nFARE TYPE\n\nWanna Get Away\n\nGov't taxes and " \
                       "fees\n\nTotal\n\nTotal points earned\n\nFARE " \
                       "TOTAL\n\n$353.30\n\nFARE\n\n$315.35\n\n$37.95\n\n$353.30\n\n+ 3,784PTS\n\n1/1 "
-        sw = Southwest(parsed_text)
-        self.assertEqual(353.3, sw.get_expense_charge())
-        self.assertEqual(date.fromisoformat("2019-04-07"), sw.get_expense_date())
+        self.helper_function(parsed_text, 353.3, date.fromisoformat("2019-04-07"))
 
     def test_southwest_parse_error_04(self):
         parsed_text = "4/16/2019 Southwest Airlines | My Account, Trips, Past, Pricing, Details\n\nPast Flight\n\nApr " \
@@ -73,9 +73,7 @@ class MyTestCase(unittest.TestCase):
                       "?confirmationNumber=JXXYVR\n\nFARE TYPE\n\nBusiness Select\n\nGov't taxes and " \
                       "fees\n\nTotal\n\nTotal points earned\n\nFARE " \
                       "TOTAL\n\n$586.68\n\nFARE\n\n$524.35\n\n$62.33\n\n$586.68\n\n+ 12,584PTS\n\n1/1 "
-        sw = Southwest(parsed_text)
-        self.assertEqual(586.68, sw.get_expense_charge())
-        self.assertEqual(date.fromisoformat("2019-04-10"), sw.get_expense_date())
+        self.helper_function(parsed_text, 586.68, date.fromisoformat("2019-04-10"))
 
     def test_southwest_parse_error_05(self):
         parsed_text = "3/15/2019 Southwest Airlines | My Account, Trips, Past, Details\n\nPast Flight\n\nMar 6\n\nSan " \
@@ -85,9 +83,7 @@ class MyTestCase(unittest.TestCase):
                       "?confirmationNumber=WFLJ7G\n\nFARE TYPE\n\nBusiness Select\n\nGov't taxes and " \
                       "fees\n\nTotal\n\nTotal points earned\n\nFARE " \
                       "TOTAL\n\n$586.68\n\nFARE\n\n$524.35\n\n$62.33\n\n$586.68\n\n+ 12,584PTS\n\n1/1 "
-        sw = Southwest(parsed_text)
-        self.assertEqual(586.68, sw.get_expense_charge())
-        self.assertEqual(date.fromisoformat("2019-03-06"), sw.get_expense_date())
+        self.helper_function(parsed_text, 586.68, date.fromisoformat("2019-03-06"))
 
     def test_southwest_parse_error_06(self):
         parsed_text = "9/16/2019 Southwest Airlines | My Account, Trips, Past, Details\n\nPast Flight\n\nAug " \
@@ -97,9 +93,7 @@ class MyTestCase(unittest.TestCase):
                       "?confirmationNumber=NKUKRW\n\nFARE TYPE\n\nWanna Get Away\n\nGov't taxes and " \
                       "fees\n\nTotal\n\nTotal points earned\n\nFARE " \
                       "TOTAL\n\n$299.00\n\nFARE\n\n$256.74\n\n$42.26\n\n$299.00\n\n+ 3,080PTS\n\n1/1 "
-        sw = Southwest(parsed_text)
-        self.assertEqual(299.00, sw.get_expense_charge())
-        self.assertEqual(date.fromisoformat("2019-08-30"), sw.get_expense_date())
+        self.helper_function(parsed_text, 299.00, date.fromisoformat("2019-08-30"))
 
 
 if __name__ == '__main__':

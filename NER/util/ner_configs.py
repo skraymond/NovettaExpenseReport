@@ -6,14 +6,14 @@ logging.basicConfig(format='%(asctime)s %(levelname)3s %(module)s\t%(message)s',
 
 
 southwest_config = {
-    'rapid_reward_number': '405696734'
+    'rapid_reward_number': '123456789'
 }
 
 person_config = {
-    'name': 'Spencer K. Raymond',
-    'username': 'sraymond',
-    'home_address': '2004 C Street NE Washington DC',
-    'employee_number': '100407',
-    'employee_approver': 'Caleb DeGroote'
+    'name': 'Test T. User',
+    'username': 'tuser',
+    'home_address': '123 Sesame Street',
+    'employee_number': '444112',
+    'employee_approver': 'Big Bird'
 }
 

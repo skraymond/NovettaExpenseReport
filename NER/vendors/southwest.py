@@ -1,4 +1,4 @@
-from NER.vendors.vendor import Vendor, ChargeType
+from NER.vendors.vendor import Vendor, ChargeType, Charge
 import NER.util.ner_configs
 from NER.util.ner_configs import southwest_config
 import logging
@@ -69,8 +69,8 @@ class Southwest(Vendor):
     def parsed_correctly(self):
         return None not in [self._date, self._cost]
 
-    def get_expense_date(self):
-        return self._date
+    def get_expense_dates(self):
+        return [self._date]
 
-    def get_expense_charge(self):
-        return self._cost
+    def get_expense_charges(self):
+        return [Charge(self._cost, ChargeType.AIRPLANE, self._date)]

@@ -4,3 +4,4 @@
 /NER/test/test_enterprise_files/
 /NER/test/test_expense/
 /20200419-{user}-expense_report.xls
+/NER/util/sraymond_ner_configs.py
