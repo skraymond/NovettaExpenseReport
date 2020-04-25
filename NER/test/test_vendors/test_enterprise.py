@@ -38,8 +38,11 @@ class MyTestCase(unittest.TestCase):
     def helper_function(self, ocr_text, correct_cost, correct_date):
         ep = Enterprise(ocr_text)
         self.assertTrue(Enterprise.matches_vendor(ocr_text))
-        self.assertEqual(correct_cost, ep.get_expense_charge())
-        self.assertEqual(correct_date, ep.get_expense_date())
+        self.assertEqual(1, len(ep.get_expense_charges()))
+        self.assertEqual(ChargeType.CAR_RENTAL, ep.get_expense_charges()[0].charge_type)
+        self.assertEqual(correct_cost, ep.get_expense_charges()[0].charge_amount)
+        self.assertEqual(correct_date, ep.get_expense_charges()[0].charge_date)
+        self.assertEqual(correct_date, ep.get_expense_dates()[0])
 
     def test_enterprise_parse_test_01(self):
         ocr_text = '-©Snterprise\n\nRenter Information\n\nRenter Name\nSPENCER RAYMOND\n\nRenter Address\nWASHINGTON, ' \
