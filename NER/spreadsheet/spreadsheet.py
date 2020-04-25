@@ -9,6 +9,7 @@ import os
 from NER.vendors.vendor import ChargeType
 
 
+
 class Spreadsheet(metaclass=ABCMeta):
 
     def __init__(self, template_filename, output_filename):

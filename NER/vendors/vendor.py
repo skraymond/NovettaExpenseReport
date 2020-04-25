@@ -37,10 +37,14 @@ class Charge(object):
     @:param charge_type a ChargeType representing the type of charge
     @:param charge_date a datetime of the date of the charge
     """
+
     def __init__(self, charge_amount, charge_type, charge_date):
         self.charge_amount = charge_amount
         self.charge_type = charge_type
         self.charge_date = charge_date
+
+    def __str__(self):
+        return "%s charge for %.2f on %s" % (self.charge_type, self.charge_amount, str(self.charge_date))
 
 
 class Vendor(metaclass=ABCMeta):

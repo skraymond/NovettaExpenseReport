@@ -2,7 +2,7 @@
 import logging
 
 logging.basicConfig(format='%(asctime)s %(levelname)3s %(module)s\t%(message)s', datefmt='%m/%d/%Y %I:%M:%S %p',
-                    level=logging.DEBUG)
+                    level=logging.INFO)
 
 
 southwest_config = {

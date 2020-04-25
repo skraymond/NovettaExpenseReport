@@ -2,8 +2,8 @@ from NER.vendors.vendor import Vendor, ChargeType, Charge
 import NER.util.ner_configs
 from NER.util.ner_configs import southwest_config
 import logging
+import logging
 import re
-from decimal import Decimal as D
 from datetime import date
 import dateparser
 import datetime
