@@ -3,7 +3,7 @@ et-xmlfile==1.0.1
 jdcal==1.4.1
 openpyxl==3.0.3
 pdf2image==1.12.1
-Pillow==7.1.1
+Pillow==10.0.1
 pytesseract==0.3.3
 python-dateutil==2.8.1
 pytz==2019.3
